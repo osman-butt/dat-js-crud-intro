@@ -4,7 +4,7 @@ const endpoint =
 let selectedUser;
 
 // ============ READ ============ //
-// Read (GET) all users from Firebase (Database) through REST API
+// Read (GET) all users from Firebase (Database) using REST API
 async function readUsers() {
     const res = await fetch(`${endpoint}/users.json`);
     const data = await res.json();
