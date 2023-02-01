@@ -6,8 +6,8 @@ let selectedUser;
 // ============ READ ============ //
 // Read (GET) all users from Firebase (Database) using REST API
 async function readUsers() {
-    const res = await fetch(`${endpoint}/users.json`);
-    const data = await res.json();
+    const response = await fetch(`${endpoint}/users.json`);
+    const data = await response.json();
     const users = Object.keys(data).map(key => ({ id: key, ...data[key] })); // from object to array
     return users;
 }
