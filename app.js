@@ -1,31 +1,123 @@
-// ====== READ ======//
+// ============ GLOBAL VARIABELS ============ //
+const endpoint =
+    "https://race-dat-v1-default-rtdb.europe-west1.firebasedatabase.app";
+let selectedUser;
 
-function readUsers() {
-    // read users
+// ============ READ ============ //
+// Read (GET) all users from Firebase (Database) through REST API
+async function readUsers() {
+    const res = await fetch(`${endpoint}/users.json`);
+    const data = await res.json();
+    const users = Object.keys(data).map(key => ({ id: key, ...data[key] })); // from object to array
+    return users;
 }
 
-function displayUsers() {
-    // append users to the DOM
+// Create HTML and display all users from given list
+function displayUsers(list) {
+    // reset <section id="users-grid" class="grid-container">...</section>
+    document.querySelector("#users-grid").innerHTML = "";
+    //loop through all users and create an article with content for each
+    for (const user of list) {
+        document.querySelector("#users-grid").insertAdjacentHTML(
+            "beforeend",
+            /*html*/ `
+            <article>
+                <img src="${user.image}">
+                <h2>${user.name}</h2>
+                <p>${user.title}</p>
+                <a href="mailto:${user.mail}">${user.mail}</a>
+                 <div class="btns">
+                    <button class="btn-update-user">Update</button>
+                    <button class="btn-delete-user">Delete</button>
+                </div>
+            </article>
+        `
+        );
+        document
+            .querySelector("#users-grid article:last-child .btn-delete-user")
+            .addEventListener("click", () => deleteUser(user.id));
+        document
+            .querySelector("#users-grid article:last-child .btn-update-user")
+            .addEventListener("click", () => selectUser(user));
+    }
 }
 
-// ====== CREATE ======//
-function createUser() {
+// ============ CREATE ============ //
+// Create (POST) user to Firebase (Database) through REST API
+async function createUser(event) {
+    event.preventDefault();
+    const name = event.target.name.value;
+    const title = event.target.title.value;
+    const mail = event.target.mail.value;
+    const image = event.target.image.value;
     // create a new user
+    const newUser = { name, title, mail, image };
+    const userAsJson = JSON.stringify(newUser);
+    const response = await fetch(`${endpoint}/users.json`, {
+        method: "POST",
+        body: userAsJson
+    });
+
+    if (response.ok) {
+        // if success, update the users grid
+        updateUsersGrid();
+        // and scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 }
 
-// ====== UPDATE ======//
-function selectUser() {
-    // select user
+// ============ UPDATE ============ //
+function selectUser(user) {
+    // Set global varaiable
+    selectedUser = user;
+    const form = document.querySelector("#form-update");
+    form.name.value = user.name;
+    form.title.value = user.title;
+    form.mail.value = user.mail;
+    form.image.value = user.image;
+    form.scrollIntoView({ behavior: "smooth" });
 }
 
-function updateUser() {
+async function updateUser(event) {
+    event.preventDefault();
+    const name = event.target.name.value;
+    const title = event.target.title.value;
+    const mail = event.target.mail.value;
+    const image = event.target.image.value;
     // update user
+    const userToUpdate = { name, title, mail, image };
+    const userAsJson = JSON.stringify(userToUpdate);
+    const response = await fetch(`${endpoint}/users/${selectedUser.id}.json`, {
+        method: "PUT",
+        body: userAsJson
+    });
+    if (response.ok) {
+        // if success, update the users grid
+        updateUsersGrid();
+        // and scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 }
 
-// ====== DELETE ======//
-function deleteUser() {
-    //delete user
+// ================== DELETE ============ //
+async function deleteUser(id) {
+    const response = await fetch(`${endpoint}/users/${id}.json`, {
+        method: "DELETE"
+    });
+    if (response.ok) {
+        // if success, update the users grid
+        updateUsersGrid();
+    }
 }
 
-// ====== Init CRUD App ======//
-readUsers();
+// ================== Events and Event Listeners ============ //
+document.querySelector("#form-update").addEventListener("submit", updateUser);
+document.querySelector("#form-create").addEventListener("submit", createUser);
+
+async function updateUsersGrid() {
+    const users = await readUsers();
+    displayUsers(users);
+}
+
+// ============ Init CRUD App ============ //
+updateUsersGrid(); // to initialize the grid view with users
