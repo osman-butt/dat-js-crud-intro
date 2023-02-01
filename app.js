@@ -6,8 +6,8 @@ let selectedUser;
 // ============ READ ============ //
 // Read (GET) all users from Firebase (Database) using REST API
 async function readUsers() {
-    const response = await fetch(`${endpoint}/users.json`);
-    const data = await response.json();
+    const res = await fetch(`${endpoint}/users.json`);
+    const data = await res.json();
     const users = Object.keys(data).map(key => ({ id: key, ...data[key] })); // from object to array
     return users;
 }
@@ -43,14 +43,15 @@ function displayUsers(list) {
 }
 
 // ============ CREATE ============ //
-// Create (POST) user to Firebase (Database) through REST API
+// Create (POST) user to Firebase (Database) using REST API
 async function createUser(event) {
     event.preventDefault();
-    // create reference (variable) to name, title, mail, image in event.target.xxxx.value
-    // to do...
-
+    const name = event.target.name.value;
+    const title = event.target.title.value;
+    const mail = event.target.mail.value;
+    const image = event.target.image.value;
     // create a new user
-    const newUser = {}; // to do: use name, title, mail, image
+    const newUser = { name, title, mail, image };
     const userAsJson = JSON.stringify(newUser);
     const response = await fetch(`${endpoint}/users.json`, {
         method: "POST",
@@ -67,23 +68,24 @@ async function createUser(event) {
 
 // ============ UPDATE ============ //
 function selectUser(user) {
-    // set global varaiable
+    // Set global varaiable
     selectedUser = user;
     const form = document.querySelector("#form-update");
-
-    // set form input fields with user properties/values
-    // to do...
-
+    form.name.value = user.name;
+    form.title.value = user.title;
+    form.mail.value = user.mail;
+    form.image.value = user.image;
     form.scrollIntoView({ behavior: "smooth" });
 }
 
 async function updateUser(event) {
     event.preventDefault();
-    // create reference (variable) to name, title, mail, image in event.target.xxxx.value
-    // to do...
-
+    const name = event.target.name.value;
+    const title = event.target.title.value;
+    const mail = event.target.mail.value;
+    const image = event.target.image.value;
     // update user
-    const userToUpdate = {}; // to do: use name, title, mail, image
+    const userToUpdate = { name, title, mail, image };
     const userAsJson = JSON.stringify(userToUpdate);
     const response = await fetch(`${endpoint}/users/${selectedUser.id}.json`, {
         method: "PUT",
@@ -91,13 +93,9 @@ async function updateUser(event) {
     });
     if (response.ok) {
         // if success, update the users grid
-        // to do...
+        updateUsersGrid();
         // and scroll to top
-<<<<<<< Updated upstream
         scrollToTop();
-=======
-        // to do...
->>>>>>> Stashed changes
     }
 }
 
@@ -108,7 +106,7 @@ async function deleteUser(id) {
     });
     if (response.ok) {
         // if success, update the users grid
-        // to do...
+        updateUsersGrid();
     }
 }
 
@@ -126,5 +124,4 @@ async function updateUsersGrid() {
 }
 
 // ============ Init CRUD App ============ //
-// initialize the grid view with users, call updateUsersGrid
-// to do...
+updateUsersGrid(); // to initialize the grid view with users
