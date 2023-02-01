@@ -62,7 +62,7 @@ async function createUser(event) {
         // if success, update the users grid
         updateUsersGrid();
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
     }
 }
 
@@ -95,7 +95,7 @@ async function updateUser(event) {
         // if success, update the users grid
         updateUsersGrid();
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
     }
 }
 
@@ -113,6 +113,10 @@ async function deleteUser(id) {
 // ================== Events and Event Listeners ============ //
 document.querySelector("#form-update").addEventListener("submit", updateUser);
 document.querySelector("#form-create").addEventListener("submit", createUser);
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 async function updateUsersGrid() {
     const users = await readUsers();
