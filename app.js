@@ -6,8 +6,8 @@ let selectedUser;
 // ============ READ ============ //
 // Read (GET) all users from Firebase (Database) using REST API
 async function readUsers() {
-    const response = await fetch(`${endpoint}/users.json`);
-    const data = await response.json();
+    const res = await fetch(`${endpoint}/users.json`);
+    const data = await res.json();
     const users = Object.keys(data).map(key => ({ id: key, ...data[key] })); // from object to array
     return users;
 }
@@ -22,10 +22,23 @@ function displayUsers(list) {
             "beforeend",
             /*html*/ `
             <article>
+                <img src="${user.image}">
                 <h2>${user.name}</h2>
+                <p>${user.title}</p>
+                <a href="mailto:${user.mail}">${user.mail}</a>
+                 <div class="btns">
+                    <button class="btn-update-user">Update</button>
+                    <button class="btn-delete-user">Delete</button>
+                </div>
             </article>
         `
         );
+        document
+            .querySelector("#users-grid article:last-child .btn-delete-user")
+            .addEventListener("click", () => deleteUser(user.id));
+        document
+            .querySelector("#users-grid article:last-child .btn-update-user")
+            .addEventListener("click", () => selectUser(user));
     }
 }
 
@@ -47,9 +60,9 @@ async function createUser(event) {
 
     if (response.ok) {
         // if success, update the users grid
-
+        updateUsersGrid();
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
     }
 }
 
@@ -82,6 +95,7 @@ async function updateUser(event) {
         // if success, update the users grid
         updateUsersGrid();
         // and scroll to top
+        scrollToTop();
     }
 }
 
