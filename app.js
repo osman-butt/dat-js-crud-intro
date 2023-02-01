@@ -6,8 +6,8 @@ let selectedUser;
 // ============ READ ============ //
 // Read (GET) all users from Firebase (Database) using REST API
 async function readUsers() {
-    const res = await fetch(`${endpoint}/users.json`);
-    const data = await res.json();
+    const response = await fetch(`${endpoint}/users.json`);
+    const data = await response.json();
     const users = Object.keys(data).map(key => ({ id: key, ...data[key] })); // from object to array
     return users;
 }
@@ -46,12 +46,11 @@ function displayUsers(list) {
 // Create (POST) user to Firebase (Database) using REST API
 async function createUser(event) {
     event.preventDefault();
-    const name = event.target.name.value;
-    const title = event.target.title.value;
-    const mail = event.target.mail.value;
-    const image = event.target.image.value;
+    // create reference (variable) to name, title, mail, image in event.target.xxxx.value
+    // to do...
+
     // create a new user
-    const newUser = { name, title, mail, image };
+    const newUser = {}; // to do: use name, title, mail, image
     const userAsJson = JSON.stringify(newUser);
     const response = await fetch(`${endpoint}/users.json`, {
         method: "POST",
@@ -62,30 +61,29 @@ async function createUser(event) {
         // if success, update the users grid
         updateUsersGrid();
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
     }
 }
 
 // ============ UPDATE ============ //
 function selectUser(user) {
-    // Set global varaiable
+    // set global varaiable
     selectedUser = user;
     const form = document.querySelector("#form-update");
-    form.name.value = user.name;
-    form.title.value = user.title;
-    form.mail.value = user.mail;
-    form.image.value = user.image;
+
+    // set form input fields with user properties/values
+    // to do...
+
     form.scrollIntoView({ behavior: "smooth" });
 }
 
 async function updateUser(event) {
     event.preventDefault();
-    const name = event.target.name.value;
-    const title = event.target.title.value;
-    const mail = event.target.mail.value;
-    const image = event.target.image.value;
+    // create reference (variable) to name, title, mail, image in event.target.xxxx.value
+    // to do...
+
     // update user
-    const userToUpdate = { name, title, mail, image };
+    const userToUpdate = {}; // to do: use name, title, mail, image
     const userAsJson = JSON.stringify(userToUpdate);
     const response = await fetch(`${endpoint}/users/${selectedUser.id}.json`, {
         method: "PUT",
@@ -93,9 +91,13 @@ async function updateUser(event) {
     });
     if (response.ok) {
         // if success, update the users grid
-        updateUsersGrid();
+        // to do...
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
+<<<<<<< Updated upstream
+        scrollToTop();
+=======
+        // to do...
+>>>>>>> Stashed changes
     }
 }
 
@@ -106,7 +108,7 @@ async function deleteUser(id) {
     });
     if (response.ok) {
         // if success, update the users grid
-        updateUsersGrid();
+        // to do...
     }
 }
 
@@ -114,10 +116,15 @@ async function deleteUser(id) {
 document.querySelector("#form-update").addEventListener("submit", updateUser);
 document.querySelector("#form-create").addEventListener("submit", createUser);
 
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 async function updateUsersGrid() {
     const users = await readUsers();
     displayUsers(users);
 }
 
 // ============ Init CRUD App ============ //
-updateUsersGrid(); // to initialize the grid view with users
+// initialize the grid view with users, call updateUsersGrid
+// to do...
