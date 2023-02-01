@@ -22,23 +22,10 @@ function displayUsers(list) {
             "beforeend",
             /*html*/ `
             <article>
-                <img src="${user.image}">
                 <h2>${user.name}</h2>
-                <p>${user.title}</p>
-                <a href="mailto:${user.mail}">${user.mail}</a>
-                 <div class="btns">
-                    <button class="btn-update-user">Update</button>
-                    <button class="btn-delete-user">Delete</button>
-                </div>
             </article>
         `
         );
-        document
-            .querySelector("#users-grid article:last-child .btn-delete-user")
-            .addEventListener("click", () => deleteUser(user.id));
-        document
-            .querySelector("#users-grid article:last-child .btn-update-user")
-            .addEventListener("click", () => selectUser(user));
     }
 }
 
@@ -60,7 +47,7 @@ async function createUser(event) {
 
     if (response.ok) {
         // if success, update the users grid
-        updateUsersGrid();
+
         // and scroll to top
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -95,7 +82,6 @@ async function updateUser(event) {
         // if success, update the users grid
         updateUsersGrid();
         // and scroll to top
-        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 }
 
@@ -113,6 +99,10 @@ async function deleteUser(id) {
 // ================== Events and Event Listeners ============ //
 document.querySelector("#form-update").addEventListener("submit", updateUser);
 document.querySelector("#form-create").addEventListener("submit", createUser);
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 async function updateUsersGrid() {
     const users = await readUsers();
