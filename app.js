@@ -43,7 +43,7 @@ function displayUsers(list) {
 }
 
 // ============ CREATE ============ //
-// Create (POST) user to Firebase (Database) using REST API
+// Create (POST) user to Firebase (Database) through REST API
 async function createUser(event) {
     event.preventDefault();
     // create reference (variable) to name, title, mail, image in event.target.xxxx.value
