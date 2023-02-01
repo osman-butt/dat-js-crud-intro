@@ -1,6 +1,8 @@
 // ============ GLOBAL VARIABELS ============ //
 const endpoint =
     "https://race-dat-v1-default-rtdb.europe-west1.firebasedatabase.app";
+// const endpoint =
+//     "https://race-dat-v2-default-rtdb.europe-west1.firebasedatabase.app";
 let selectedUser;
 
 // ============ READ ============ //
