@@ -1,9 +1,5 @@
 // ============ GLOBAL VARIABELS ============ //
-const endpoint = "";
-// const endpoint =
-//     "https://race-dat-v1-default-rtdb.europe-west1.firebasedatabase.app";
-// const endpoint =
-//     "https://race-dat-v2-default-rtdb.europe-west1.firebasedatabase.app";
+const endpoint = ""; // To do: paste url to endpoint
 let selectedUser;
 
 // ============ READ ============ //
@@ -113,4 +109,4 @@ async function updateUsersGrid() {
 }
 
 // ============ Init CRUD App ============ //
-updateUsersGrid(); // to initialize the grid view with users
+// To do: call/ run updateUsersGrid to initialise the app
