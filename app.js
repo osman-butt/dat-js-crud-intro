@@ -43,7 +43,7 @@ function displayUsers(list) {
 }
 
 // ============ CREATE ============ //
-// Create (POST) user to Firebase (Database) through REST API
+// Create (POST) user to Firebase (Database) using REST API
 async function createUser(event) {
     event.preventDefault();
     const name = event.target.name.value;
